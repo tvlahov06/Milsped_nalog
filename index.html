@@ -336,11 +336,8 @@
     <div class="stats-row" id="stats-row"></div>
     <div class="toolbar">
       <input id="search-input" style="max-width:280px" placeholder="🔍 Pretraži kupca, mjesto, ID..." oninput="renderTable()" />
-      <button class="btn btn-primary"   onclick="goNew()">＋ Novi nalog</button>
-      <button class="btn btn-success"   onclick="exportXLSX(null)">📊 Excel</button>
-      <button class="btn btn-success"   id="btn-export-sel" onclick="exportSelected()" style="display:none;background:linear-gradient(135deg,#16a34a,#15803d)">📊 Excel označenih (<span id="sel-count">0</span>)</button>
-      <button class="btn btn-secondary" onclick="exportJSON()">💾 JSON</button>
-      <button class="btn btn-ghost"     onclick="document.getElementById('file-import').click()">📥 Uvoz</button>
+      <button class="btn btn-primary" onclick="goNew()">＋ Novi nalog</button>
+      <button class="btn btn-success" id="btn-export-sel" onclick="exportSelected()">📊 Excel označenih (<span id="sel-count">0</span>)</button>
       <input type="file" id="file-import" accept=".json" style="display:none" onchange="importJSON(event)" />
     </div>
     <div class="card">
@@ -862,13 +859,7 @@ function toggleCheckAll() {
 
 function updateSelection() {
   const selected = document.querySelectorAll(".row-check:checked");
-  const count = selected.length;
-  const btnSel = document.getElementById("btn-export-sel");
-  const btnAll = document.querySelector('.btn-success[onclick="exportXLSX(null)"]');
-  document.getElementById("sel-count").textContent = count;
-  btnSel.style.display = count > 0 ? "" : "none";
-  if (btnAll) btnAll.style.display = count > 0 ? "none" : "";
-  // Sync "označi sve" checkbox
+  document.getElementById("sel-count").textContent = selected.length;
   const all = document.querySelectorAll(".row-check");
   const chkAll = document.getElementById("check-all");
   if (chkAll) chkAll.checked = all.length > 0 && selected.length === all.length;
@@ -876,9 +867,8 @@ function updateSelection() {
 
 function exportSelected() {
   const ids = [...document.querySelectorAll(".row-check:checked")].map(cb => cb.dataset.id);
-  if (!ids.length) return;
+  if (!ids.length) { showToast("Označi barem jedan nalog za export!", "error"); return; }
   exportXLSX(ids);
-  // Odznači sve nakon exporta
   document.querySelectorAll(".row-check").forEach(cb => cb.checked = false);
   document.getElementById("check-all").checked = false;
   updateSelection();
@@ -958,10 +948,10 @@ function buildXLSXRows(data) {
     i+1, n.externiDokument||"", n.nazivKupca||"", n.adresa||"", n.postanskiBroj||"",
     n.mjesto||"", n.kontaktBroj||"", n.koleta||"",
     n.brutoTezina ? parseFloat(n.brutoTezina) : "",
-    n.fakturnaVrijednost ? parseFloat(n.fakturnaVrijednost) : "",
+    n.fakturnaVrijednost ? parseFloat(n.fakturnaVrijednost).toLocaleString("hr-HR") + " €" : "",
     n.nazivArtikla||"", n.poslovnica||"",
     n.otkupnina ? "DA" : "NE",
-    n.otkupnina && n.iznosOtkupnine ? parseFloat(n.iznosOtkupnine) : "",
+    n.otkupnina && n.iznosOtkupnine ? parseFloat(n.iznosOtkupnine).toLocaleString("hr-HR") + " €" : "",
   ]);
   return [h, ...rows];
 }
