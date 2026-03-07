@@ -418,54 +418,7 @@
       <button class="btn btn-ghost" onclick="goTable()">← Natrag</button>
       <h2 id="form-title" style="font-size:21px;font-weight:800"></h2>
     </div>
-
-    <div class="card">
-      <div class="card-title" style="color:#f97316">Podaci o kupcu</div>
-      <div class="form-grid">
-        <div><label class="field-label">Naziv kupca *</label><input id="f-nazivKupca" /></div>
-        <div><label class="field-label">Adresa *</label><input id="f-adresa" /></div>
-        <div><label class="field-label">Poštanski broj *</label><input id="f-postanskiBroj" /></div>
-        <div><label class="field-label">Mjesto *</label><input id="f-mjesto" /></div>
-        <div><label class="field-label">Kontakt broj</label><input id="f-kontaktBroj" type="tel" /></div>
-        <div>
-          <label class="field-label">Poslovnica *</label>
-          <select id="f-poslovnica">
-            <option value="">-- Odaberite poslovnicu --</option>
-            <option value="BigBang Split CCO">BigBang Split CCO</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title" style="color:#3b82f6">Podaci o pošiljci</div>
-      <div class="form-grid">
-        <div><label class="field-label">Koleta</label><input id="f-koleta" /></div>
-        <div><label class="field-label">Bruto težina (kg)</label><input id="f-brutoTezina" type="number" min="0" step="0.01" /></div>
-        <div>
-          <label class="field-label">Fakturna vrijednost</label>
-          <div class="euro-wrap"><input id="f-fakturnaVrijednost" type="number" min="0" step="0.01" /><span class="euro-sign">€</span></div>
-        </div>
-        <div><label class="field-label">Broj ext. dokumenta (ID)</label><input id="f-externiDokument" /></div>
-        <div style="grid-column: 1 / -1">
-          <label class="field-label">Naziv artikla</label>
-          <textarea id="f-nazivArtikla" class="field-input"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title" style="color:#a855f7">Otkupnina</div>
-      <label style="display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:16px">
-        <input type="checkbox" id="f-otkupnina" onchange="toggleOtkupnina()" />
-        <span style="font-size:16px;font-weight:700">Nalog ima otkupninu</span>
-      </label>
-      <div id="otkupnina-iznos" style="display:none;max-width:280px">
-        <label class="field-label">Iznos otkupnine *</label>
-        <div class="euro-wrap"><input id="f-iznosOtkupnine" type="number" min="0" step="0.01" /><span class="euro-sign">€</span></div>
-      </div>
-    </div>
-
+    <div id="form-fields-container"></div>
     <div class="flex-end">
       <button class="btn btn-ghost"   onclick="goTable()">Odustani</button>
       <button class="btn btn-primary" onclick="handleSubmit()" id="submit-btn">✅ Kreiraj nalog</button>
@@ -536,8 +489,19 @@
 <div id="toast"></div>
 
 <script>
-const SORT_COLS = ["externiDokument","nazivKupca","mjesto","koleta","brutoTezina","fakturnaVrijednost","otkupnina","preuzeto","kreiranDatum","preuzetoDatum"];
-const FIELDS    = ["nazivKupca","adresa","postanskiBroj","mjesto","kontaktBroj","poslovnica","koleta","brutoTezina","fakturnaVrijednost","externiDokument","nazivArtikla","iznosOtkupnine"];
+// Milšped polja
+const FIELDS_MILSPED    = ["nazivKupca","adresa","postanskiBroj","mjesto","kontaktBroj","poslovnica","koleta","brutoTezina","fakturnaVrijednost","externiDokument","nazivArtikla","iznosOtkupnine"];
+const SORT_COLS_MILSPED = ["externiDokument","nazivKupca","mjesto","koleta","brutoTezina","fakturnaVrijednost","otkupnina","preuzeto","kreiranDatum","preuzetoDatum"];
+
+// IP Perajica polja
+const FIELDS_PERAJICA    = ["imeIPrezime","adresa","postanskiBroj","mjesto","kontaktBroj","pjNalogodavac","djelatnik","datumNaloga","isporukaSa","b2cDostava","gabaritnaRoba","nosenjaNaKat","kojKat","dostavaVanSplita","b2bDostava","brojPaleta","instalacija","odvozStarog","tipUredaja","koleta","tezinaUredaja","napomene"];
+const SORT_COLS_PERAJICA = ["imeIPrezime","mjesto","b2cDostava","b2bDostava","kreiranDatum"];
+
+function getFields()   { return aktivnaSpedicija === "perajica" ? FIELDS_PERAJICA   : FIELDS_MILSPED; }
+function getSortCols() { return aktivnaSpedicija === "perajica" ? SORT_COLS_PERAJICA : SORT_COLS_MILSPED; }
+// Keep legacy references working
+let FIELDS    = FIELDS_MILSPED;
+let SORT_COLS = SORT_COLS_MILSPED;
 
 let nalozi   = [];
 let sortCol  = "kreiranDatum";
@@ -798,7 +762,7 @@ function goTable() {
 }
 
 function goNew() {
-  editId = null; clearForm();
+  editId = null; renderForm();
   document.getElementById("form-title").textContent = "➕ Novi nalog za dostavu";
   document.getElementById("submit-btn").textContent  = "✅ Kreiraj nalog";
   hide("view-table"); show("view-form");
@@ -820,41 +784,184 @@ function goEdit(id) {
 function show(id) { document.getElementById(id).style.display = ""; }
 function hide(id) { document.getElementById(id).style.display = "none"; }
 
-// ── FORM ──────────────────────────────────────────────────────────────────
+// ── FORM – RENDER ─────────────────────────────────────────────────────────
+function renderForm() {
+  const sp = aktivnaSpedicija;
+  const c = document.getElementById("form-fields-container");
+  if (sp === "perajica") {
+    c.innerHTML = `
+      <div class="card">
+        <div class="card-title" style="color:#3b82f6">Dostava na adresu</div>
+        <div class="form-grid">
+          <div><label class="field-label">Ime i prezime *</label><input id="f-imeIPrezime" /></div>
+          <div><label class="field-label">Adresa *</label><input id="f-adresa" /></div>
+          <div><label class="field-label">Poštanski broj</label><input id="f-postanskiBroj" /></div>
+          <div><label class="field-label">Mjesto *</label><input id="f-mjesto" /></div>
+          <div><label class="field-label">Kontakt broj</label><input id="f-kontaktBroj" type="tel" /></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#f97316">Podaci o nalogu</div>
+        <div class="form-grid">
+          <div>
+            <label class="field-label">PJ nalogodavac</label>
+            <select id="f-pjNalogodavac">
+              <option value="">-- Odaberite poslovnicu --</option>
+              <option value="BigBang Split CCO">BigBang Split CCO</option>
+            </select>
+          </div>
+          <div><label class="field-label">Djelatnik</label><input id="f-djelatnik" /></div>
+          <div><label class="field-label">Datum</label><input id="f-datumNaloga" type="date" /></div>
+          <div>
+            <label class="field-label">Isporuka sa</label>
+            <select id="f-isporukaSa">
+              <option value="">-- Odaberite poslovnicu --</option>
+              <option value="BigBang Split CCO">BigBang Split CCO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#a855f7">Usluge</div>
+        <div class="form-grid">
+          ${daNePolje("b2cDostava","B2C dostava")}
+          ${daNePolje("gabaritnaRoba","Gabaritna roba")}
+          ${daNePolje("nosenjaNaKat","Nošenje na kat")}
+          <div><label class="field-label">Na koji kat</label><input id="f-kojKat" /></div>
+          ${daNePolje("dostavaVanSplita","Dostava van Splita")}
+          ${daNePolje("b2bDostava","B2B dostava")}
+          <div><label class="field-label">Broj paleta</label><input id="f-brojPaleta" /></div>
+          ${daNePolje("instalacija","Usluga instalacije/montaže")}
+          ${daNePolje("odvozStarog","Odvoz starog uređaja")}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#10b981">Uređaj</div>
+        <div class="form-grid">
+          <div style="grid-column:1/-1"><label class="field-label">Tip uređaja</label><textarea id="f-tipUredaja" class="field-input"></textarea></div>
+          <div><label class="field-label">Količina</label><input id="f-koleta" type="number" min="0" step="1" /></div>
+          <div><label class="field-label">Težina uređaja (kg)</label><input id="f-tezinaUredaja" type="number" min="0" step="0.01" /></div>
+          <div style="grid-column:1/-1"><label class="field-label">Dodatne napomene</label><textarea id="f-napomene" class="field-input"></textarea></div>
+        </div>
+      </div>`;
+  } else {
+    c.innerHTML = `
+      <div class="card">
+        <div class="card-title" style="color:#f97316">Podaci o kupcu</div>
+        <div class="form-grid">
+          <div><label class="field-label">Naziv kupca *</label><input id="f-nazivKupca" /></div>
+          <div><label class="field-label">Adresa *</label><input id="f-adresa" /></div>
+          <div><label class="field-label">Poštanski broj *</label><input id="f-postanskiBroj" /></div>
+          <div><label class="field-label">Mjesto *</label><input id="f-mjesto" /></div>
+          <div><label class="field-label">Kontakt broj</label><input id="f-kontaktBroj" type="tel" /></div>
+          <div>
+            <label class="field-label">Poslovnica *</label>
+            <select id="f-poslovnica">
+              <option value="">-- Odaberite poslovnicu --</option>
+              <option value="BigBang Split CCO">BigBang Split CCO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#3b82f6">Podaci o pošiljci</div>
+        <div class="form-grid">
+          <div><label class="field-label">Koleta</label><input id="f-koleta" /></div>
+          <div><label class="field-label">Bruto težina (kg)</label><input id="f-brutoTezina" type="number" min="0" step="0.01" /></div>
+          <div>
+            <label class="field-label">Fakturna vrijednost</label>
+            <div class="euro-wrap"><input id="f-fakturnaVrijednost" type="number" min="0" step="0.01" /><span class="euro-sign">€</span></div>
+          </div>
+          <div><label class="field-label">Broj ext. dokumenta (ID)</label><input id="f-externiDokument" /></div>
+          <div style="grid-column: 1 / -1">
+            <label class="field-label">Naziv artikla</label>
+            <textarea id="f-nazivArtikla" class="field-input"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#a855f7">Otkupnina</div>
+        <label style="display:flex;align-items:center;gap:14px;cursor:pointer;margin-bottom:16px">
+          <input type="checkbox" id="f-otkupnina" onchange="toggleOtkupnina()" />
+          <span style="font-size:16px;font-weight:700">Nalog ima otkupninu</span>
+        </label>
+        <div id="otkupnina-iznos" style="display:none;max-width:280px">
+          <label class="field-label">Iznos otkupnine *</label>
+          <div class="euro-wrap"><input id="f-iznosOtkupnine" type="number" min="0" step="0.01" /><span class="euro-sign">€</span></div>
+        </div>
+      </div>`;
+  }
+}
+
+const DANE_DEFAULT_DA = ["b2cDostava","gabaritnaRoba","nosenjaNaKat"];
+
+function daNePolje(id, label) {
+  const defDA = DANE_DEFAULT_DA.includes(id);
+  return `<div><label class="field-label">${label}</label>
+    <select id="f-${id}">
+      <option value="NE" ${defDA ? "" : "selected"}>NE</option>
+      <option value="DA" ${defDA ? "selected" : ""}>DA</option>
+    </select></div>`;
+}
+
+// ── FORM – CLEAR / FILL / READ ────────────────────────────────────────────
 function clearForm() {
-  FIELDS.forEach(f => { const el = document.getElementById("f-"+f); if (el) el.value = ""; });
-  document.getElementById("f-otkupnina").checked = false;
-  document.getElementById("otkupnina-iznos").style.display = "none";
+  renderForm();
 }
 
 function fillForm(n) {
-  FIELDS.forEach(f => { const el = document.getElementById("f-"+f); if (el) el.value = n[f] || ""; });
-  document.getElementById("f-otkupnina").checked = !!n.otkupnina;
-  document.getElementById("otkupnina-iznos").style.display = n.otkupnina ? "" : "none";
+  renderForm();
+  // Defer to next tick so DOM is ready
+  setTimeout(() => {
+    getFields().forEach(f => {
+      const el = document.getElementById("f-"+f);
+      if (!el) return;
+      if (el.tagName === "SELECT") el.value = n[f] || (el.options[0]?.value || "");
+      else el.value = n[f] || "";
+    });
+    if (aktivnaSpedicija !== "perajica") {
+      const chk = document.getElementById("f-otkupnina");
+      if (chk) { chk.checked = !!n.otkupnina; toggleOtkupnina(); }
+    }
+  }, 0);
 }
 
 function readForm() {
   const obj = {};
-  FIELDS.forEach(f => { const el = document.getElementById("f-"+f); if (el) obj[f] = el.value.trim(); });
-  obj.otkupnina = document.getElementById("f-otkupnina").checked;
+  getFields().forEach(f => {
+    const el = document.getElementById("f-"+f);
+    if (el) obj[f] = el.value.trim ? el.value.trim() : el.value;
+  });
+  if (aktivnaSpedicija !== "perajica") {
+    const chk = document.getElementById("f-otkupnina");
+    if (chk) obj.otkupnina = chk.checked;
+  }
   return obj;
 }
 
 function toggleOtkupnina() {
-  const chk = document.getElementById("f-otkupnina").checked;
-  document.getElementById("otkupnina-iznos").style.display = chk ? "" : "none";
-  if (!chk) document.getElementById("f-iznosOtkupnine").value = "";
+  const chk = document.getElementById("f-otkupnina");
+  if (!chk) return;
+  const el = document.getElementById("otkupnina-iznos");
+  if (el) el.style.display = chk.checked ? "" : "none";
+  if (!chk.checked) { const i = document.getElementById("f-iznosOtkupnine"); if(i) i.value=""; }
 }
 
 // ── SUBMIT ────────────────────────────────────────────────────────────────
 function handleSubmit() {
   const data = readForm();
-  const req  = { nazivKupca:"Naziv kupca", adresa:"Adresa", postanskiBroj:"Poštanski broj", mjesto:"Mjesto", poslovnica:"Poslovnica" };
-  for (const [k, lbl] of Object.entries(req)) {
-    if (!data[k]) { showToast('Polje "' + lbl + '" je obavezno!', "error"); return; }
+  // Validation per spedicija
+  if (aktivnaSpedicija === "perajica") {
+    if (!data.imeIPrezime) { showToast('Polje "Ime i prezime" je obavezno!', "error"); return; }
+    if (!data.adresa)      { showToast('Polje "Adresa" je obavezno!', "error"); return; }
+    if (!data.mjesto)      { showToast('Polje "Mjesto" je obavezno!', "error"); return; }
+  } else {
+    const req = { nazivKupca:"Naziv kupca", adresa:"Adresa", postanskiBroj:"Poštanski broj", mjesto:"Mjesto", poslovnica:"Poslovnica" };
+    for (const [k, lbl] of Object.entries(req)) {
+      if (!data[k]) { showToast('Polje "' + lbl + '" je obavezno!', "error"); return; }
+    }
+    if (data.otkupnina && !data.iznosOtkupnine) { showToast("Unesite iznos otkupnine!", "error"); return; }
   }
-  if (data.otkupnina && !data.iznosOtkupnine) { showToast("Unesite iznos otkupnine!", "error"); return; }
-
   if (editId) {
     const idx = nalozi.findIndex(n => n.id === editId);
     nalozi[idx] = { ...nalozi[idx], ...data, izmjenjenDatum: new Date().toISOString() };
@@ -868,14 +975,24 @@ function handleSubmit() {
 
 // ── STATS ─────────────────────────────────────────────────────────────────
 function renderStats() {
-  const otkupSum = nalozi.filter(n => n.otkupnina && n.iznosOtkupnine)
-    .reduce((s, n) => s + parseFloat(n.iznosOtkupnine || 0), 0).toFixed(2);
-  const items = [
-    ["#f97316", nalozi.length,                            "Ukupno naloga"],
-    ["#3b82f6", nalozi.filter(n => n.otkupnina).length,   "S otkupninom"],
-    ["#10b981", nalozi.filter(n => n.preuzeto).length,    "Preuzeto"],
-    ["#a855f7", otkupSum + " €",                          "Suma otkupnina"],
-  ];
+  let items;
+  if (aktivnaSpedicija === "perajica") {
+    items = [
+      ["#3b82f6", nalozi.length,                                              "Ukupno naloga"],
+      ["#f97316", nalozi.filter(n => n.b2cDostava === "DA").length,           "B2C dostava"],
+      ["#a855f7", nalozi.filter(n => n.dostavaVanSplita === "DA").length,     "Van Splita"],
+      ["#10b981", nalozi.filter(n => n.preuzeto).length,                      "Preuzeto"],
+    ];
+  } else {
+    const otkupSum = nalozi.filter(n => n.otkupnina && n.iznosOtkupnine)
+      .reduce((s, n) => s + parseFloat(n.iznosOtkupnine || 0), 0).toFixed(2);
+    items = [
+      ["#f97316", nalozi.length,                            "Ukupno naloga"],
+      ["#3b82f6", nalozi.filter(n => n.otkupnina).length,   "S otkupninom"],
+      ["#10b981", nalozi.filter(n => n.preuzeto).length,    "Preuzeto"],
+      ["#a855f7", otkupSum + " €",                          "Suma otkupnina"],
+    ];
+  }
   document.getElementById("stats-row").innerHTML = items.map(([c,v,l]) =>
     `<div class="stat-card" style="border-left:4px solid ${c}">
       <div class="stat-num" style="color:${c}">${v}</div>
@@ -883,11 +1000,54 @@ function renderStats() {
     </div>`).join("");
 }
 
+// ── TABLE HEADERS ─────────────────────────────────────────────────────────
+function renderTableHeaders() {
+  const thead = document.querySelector("#view-table table thead tr");
+  if (!thead) return;
+  if (aktivnaSpedicija === "perajica") {
+    thead.innerHTML = `
+      <th style="width:36px;padding:10px 8px;text-align:center">
+        <input type="checkbox" id="check-all" onchange="toggleCheckAll()" style="width:17px;height:17px;accent-color:#3b82f6;cursor:pointer" />
+      </th>
+      <th onclick="toggleSort('imeIPrezime')">Kupac <span id="si-imeIPrezime"></span></th>
+      <th onclick="toggleSort('mjesto')">Mjesto <span id="si-mjesto"></span></th>
+      <th onclick="toggleSort('tezinaUredaja')" class="hide-mobile">Kol. <span id="si-tezinaUredaja"></span></th>
+      <th onclick="toggleSort('tezinaUredaja')" class="hide-mobile">Težina <span id="si-tezinaUredaja2"></span></th>
+      <th onclick="toggleSort('b2cDostava')" class="hide-mobile">B2C <span id="si-b2cDostava"></span></th>
+      <th onclick="toggleSort('dostavaVanSplita')" class="hide-mobile">Van Splita <span id="si-dostavaVanSplita"></span></th>
+      <th onclick="toggleSort('preuzeto')">Preuzeto <span id="si-preuzeto"></span></th>
+      <th onclick="toggleSort('kreiranDatum')" class="hide-mobile">Kreirano <span id="si-kreiranDatum"></span></th>
+      <th onclick="toggleSort('preuzetoDatum')" class="hide-mobile" style="font-size:11px;white-space:nowrap;padding:10px 8px">Dat. preuz. <span id="si-preuzetoDatum"></span></th>
+      <th>Akcije</th>`;
+  } else {
+    thead.innerHTML = `
+      <th style="width:36px;padding:10px 8px;text-align:center">
+        <input type="checkbox" id="check-all" onchange="toggleCheckAll()" style="width:17px;height:17px;accent-color:#f97316;cursor:pointer" />
+      </th>
+      <th onclick="toggleSort('externiDokument')">Ext. ID <span id="si-externiDokument"></span></th>
+      <th onclick="toggleSort('nazivKupca')">Kupac <span id="si-nazivKupca"></span></th>
+      <th onclick="toggleSort('mjesto')">Mjesto <span id="si-mjesto"></span></th>
+      <th onclick="toggleSort('koleta')" class="hide-mobile">Kol. <span id="si-koleta"></span></th>
+      <th onclick="toggleSort('brutoTezina')" class="hide-mobile">Težina <span id="si-brutoTezina"></span></th>
+      <th onclick="toggleSort('fakturnaVrijednost')" class="hide-mobile">Fakt. vr. <span id="si-fakturnaVrijednost"></span></th>
+      <th onclick="toggleSort('otkupnina')">Otkupnina <span id="si-otkupnina"></span></th>
+      <th onclick="toggleSort('preuzeto')">Preuzeto <span id="si-preuzeto"></span></th>
+      <th onclick="toggleSort('kreiranDatum')" class="hide-mobile">Kreirano <span id="si-kreiranDatum"></span></th>
+      <th onclick="toggleSort('preuzetoDatum')" class="hide-mobile" style="font-size:11px;white-space:nowrap;padding:10px 8px">Dat. preuz. <span id="si-preuzetoDatum"></span></th>
+      <th>Akcije</th>`;
+  }
+}
+
 // ── TABLE ─────────────────────────────────────────────────────────────────
 function renderTable() {
+  renderTableHeaders();
   const q = document.getElementById("search-input").value.toLowerCase();
+  const isPer = aktivnaSpedicija === "perajica";
+  const accentCol = isPer ? "#3b82f6" : "#f97316";
 
   let rows = nalozi.filter(n => {
+    if (isPer) return !q || [n.imeIPrezime, n.mjesto, n.adresa, n.tipUredaja]
+      .some(v => (v||"").toLowerCase().includes(q));
     return !q || [n.nazivKupca, n.mjesto, n.externiDokument, n.nazivArtikla, n.adresa, n.poslovnica]
       .some(v => (v || "").toLowerCase().includes(q));
   }).sort((a, b) => {
@@ -896,16 +1056,45 @@ function renderTable() {
     return sortDir === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
   });
 
-  SORT_COLS.forEach(c => {
+  getSortCols().forEach(c => {
     const el = document.getElementById("si-" + c);
     if (el) el.textContent = sortCol === c ? (sortDir === "asc" ? " ↑" : " ↓") : "";
   });
 
+  const colspan = isPer ? "9" : "12";
   const tbody = document.getElementById("table-body");
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="12" class="empty-msg">${nalozi.length === 0
+    tbody.innerHTML = `<tr><td colspan="${colspan}" class="empty-msg">${nalozi.length === 0
       ? 'Nema unesenih naloga. Kliknite "＋ Novi nalog" za početak.'
       : 'Nema rezultata za zadanu pretragu.'}</td></tr>`;
+  } else if (isPer) {
+    tbody.innerHTML = rows.map(n => `
+      <tr>
+        <td style="text-align:center;padding:10px 8px">
+          <input type="checkbox" class="row-check" data-id="${n.id}" onchange="updateSelection()" style="width:17px;height:17px;accent-color:#3b82f6;cursor:pointer" />
+        </td>
+        <td><strong style="font-size:15px">${esc(n.imeIPrezime)||"-"}</strong><div class="sub-text">${esc(n.adresa)||""}</div></td>
+        <td>${esc(n.mjesto)||"-"}</td>
+        <td class="hide-mobile">${esc(n.koleta)||"-"}</td>
+        <td class="hide-mobile">${n.tezinaUredaja ? n.tezinaUredaja+" kg" : "-"}</td>
+        <td class="hide-mobile">${n.b2cDostava==="DA"?'<span class="badge badge-green">DA</span>':'<span class="badge badge-gray">NE</span>'}</td>
+        <td class="hide-mobile">${n.dostavaVanSplita==="DA"?'<span class="badge badge-green">DA</span>':'<span class="badge badge-gray">NE</span>'}</td>
+        <td>
+          <button class="preuzeto-btn ${n.preuzeto ? 'da' : 'ne'}" onclick="togglePreuzeto('${n.id}')" title="Kliknite za promjenu statusa">
+            ${n.preuzeto ? '✅ DA' : '⏳ NE'}
+          </button>
+        </td>
+        <td class="hide-mobile text-muted" style="font-size:12px">${fmtDate(n.kreiranDatum)}</td>
+        <td class="hide-mobile" style="font-size:11px;padding:11px 8px;color:${n.preuzetoDatum?'#16a34a':'var(--text3)'};font-weight:${n.preuzetoDatum?'700':'400'};white-space:nowrap">${n.preuzetoDatum ? fmtDate(n.preuzetoDatum) : "—"}</td>
+        <td>
+          <div style="display:flex;gap:5px">
+            <button class="btn btn-ghost btn-sm"     onclick="openDetail('${n.id}')" title="Detalji">👁</button>
+            <button class="btn btn-secondary btn-sm" onclick="goEdit('${n.id}')"     title="Uredi">✏️</button>
+            <button class="btn btn-success btn-sm"   onclick="exportSingle('${n.id}')" title="Export Excel">📊</button>
+            <button class="btn btn-danger btn-sm"    onclick="openDeleteModal('${n.id}')" title="Obriši">🗑</button>
+          </div>
+        </td>
+      </tr>`).join("");
   } else {
     tbody.innerHTML = rows.map(n => `
       <tr>
@@ -918,9 +1107,7 @@ function renderTable() {
         <td class="hide-mobile">${esc(n.koleta)||"-"}</td>
         <td class="hide-mobile">${n.brutoTezina?n.brutoTezina+" kg":"-"}</td>
         <td class="hide-mobile">${n.fakturnaVrijednost?parseFloat(n.fakturnaVrijednost).toLocaleString("hr-HR")+" €":"-"}</td>
-        <td>${n.otkupnina
-          ?`<span class="badge badge-red">DA</span>`
-          :`<span class="badge badge-gray">NE</span>`}</td>
+        <td>${n.otkupnina?'<span class="badge badge-red">DA</span>':'<span class="badge badge-gray">NE</span>'}</td>
         <td>
           <button class="preuzeto-btn ${n.preuzeto ? 'da' : 'ne'}" onclick="togglePreuzeto('${n.id}')" title="Kliknite za promjenu statusa">
             ${n.preuzeto ? '✅ DA' : '⏳ NE'}
@@ -993,20 +1180,40 @@ function togglePreuzetoDetail(id) {
 function openDetail(id) {
   detailId = id;
   const n = nalozi.find(x => x.id === id); if (!n) return;
-  const rows = [
-    ["Naziv kupca", n.nazivKupca], ["Adresa", n.adresa],
-    ["Poštanski broj", n.postanskiBroj], ["Mjesto", n.mjesto],
-    ["Kontakt broj", n.kontaktBroj], ["Poslovnica", n.poslovnica],
-    ["Koleta", n.koleta],
-    ["Bruto težina", n.brutoTezina ? n.brutoTezina+" kg" : "-"],
-    ["Fakturna vrijednost", n.fakturnaVrijednost ? parseFloat(n.fakturnaVrijednost).toLocaleString("hr-HR")+" €" : "-"],
-    ["Ext. dokument (ID)", n.externiDokument],
-    ["Naziv artikla", n.nazivArtikla],
-    ["Otkupnina", n.otkupnina ? `DA – ${n.iznosOtkupnine} €` : "NE"],
-    ["Datum kreiranja", fmtDateTime(n.kreiranDatum)],
-    ["Zadnja izmjena", n.izmjenjenDatum ? fmtDateTime(n.izmjenjenDatum) : "Nije mijenjano"],
-    ["Preuzeto od dostavljača", n.preuzeto ? `✅ DA (${fmtDateTime(n.preuzetoDatum)})` : "⏳ NE"],
-  ];
+  let rows;
+  if (aktivnaSpedicija === "perajica") {
+    rows = [
+      ["Ime i prezime", n.imeIPrezime], ["Adresa", n.adresa],
+      ["Poštanski broj", n.postanskiBroj], ["Mjesto", n.mjesto],
+      ["Kontakt broj", n.kontaktBroj],
+      ["PJ nalogodavac", n.pjNalogodavac], ["Djelatnik", n.djelatnik],
+      ["Datum", n.datumNaloga], ["Isporuka sa", n.isporukaSa],
+      ["B2C dostava", n.b2cDostava], ["Gabaritna roba", n.gabaritnaRoba],
+      ["Nošenje na kat", n.nosenjaNaKat], ["Na koji kat", n.kojKat],
+      ["Dostava van Splita", n.dostavaVanSplita],
+      ["B2B dostava", n.b2bDostava], ["Broj paleta", n.brojPaleta],
+      ["Usluga instalacije/montaže", n.instalacija], ["Odvoz starog uređaja", n.odvozStarog],
+      ["Tip uređaja", n.tipUredaja],
+      ["Težina uređaja", n.tezinaUredaja ? n.tezinaUredaja+" kg" : "-"],
+      ["Dodatne napomene", n.napomene],
+      ["Datum kreiranja", fmtDateTime(n.kreiranDatum)],
+      ["Zadnja izmjena", n.izmjenjenDatum ? fmtDateTime(n.izmjenjenDatum) : "Nije mijenjano"],
+    ];
+  } else {
+    rows = [
+      ["Naziv kupca", n.nazivKupca], ["Adresa", n.adresa],
+      ["Poštanski broj", n.postanskiBroj], ["Mjesto", n.mjesto],
+      ["Kontakt broj", n.kontaktBroj], ["Poslovnica", n.poslovnica],
+      ["Koleta", n.koleta],
+      ["Bruto težina", n.brutoTezina ? n.brutoTezina+" kg" : "-"],
+      ["Fakturna vrijednost", n.fakturnaVrijednost ? parseFloat(n.fakturnaVrijednost).toLocaleString("hr-HR")+" €" : "-"],
+      ["Ext. dokument (ID)", n.externiDokument],
+      ["Naziv artikla", n.nazivArtikla],
+      ["Otkupnina", n.otkupnina ? `DA – ${n.iznosOtkupnine} €` : "NE"],
+      ["Datum kreiranja", fmtDateTime(n.kreiranDatum)],
+      ["Zadnja izmjena", n.izmjenjenDatum ? fmtDateTime(n.izmjenjenDatum) : "Nije mijenjano"],
+    ];
+  }
   document.getElementById("detail-body").innerHTML = rows.map(([k, v]) =>
     `<div class="modal-row"><span class="modal-key">${k}</span><span class="modal-val">${esc(v)||"-"}</span></div>`
   ).join("") +
@@ -1041,6 +1248,9 @@ function confirmDelete() {
 
 // ── EXPORT / IMPORT ───────────────────────────────────────────────────────
 function buildXLSXRows(data) {
+  if (aktivnaSpedicija === "perajica") {
+    return buildXLSXRowsPerajica(data);
+  }
   const h = ["RB","EXT. ID","NAZIV KUPCA","ADRESA","POŠTANSKI BROJ","MJESTO","KONTAKT","KOLETA","BRUTO TEŽINA (KG)","FAKTURNA VRIJEDNOST (EUR)","NAZIV ARTIKLA","POSLOVNICA","OTKUPNINA","IZNOS OTKUPNINE (EUR)"];
   const rows = data.map((n, i) => [
     i+1, n.externiDokument||"", n.nazivKupca||"", n.adresa||"", n.postanskiBroj||"",
@@ -1054,18 +1264,110 @@ function buildXLSXRows(data) {
   return [h, ...rows];
 }
 
+function buildXLSXRowsPerajica(data) {
+  // Each nalog = one sheet formatted like the original template
+  return data; // handled per-sheet in exportXLSXPerajica
+}
+
+function exportXLSXPerajica(data) {
+  const wb = XLSX.utils.book_new();
+  const orangeFill = { fgColor: { rgb: "F97316" }, patternType: "solid" };
+  const blueFill   = { fgColor: { rgb: "3B82F6" }, patternType: "solid" };
+  const grayFill   = { fgColor: { rgb: "E2E8F0" }, patternType: "solid" };
+  const border = { top:{style:"thin",color:{rgb:"000000"}}, bottom:{style:"thin",color:{rgb:"000000"}}, left:{style:"thin",color:{rgb:"000000"}}, right:{style:"thin",color:{rgb:"000000"}} };
+  const bold = { bold: true };
+
+  data.forEach((n, idx) => {
+    const today = new Date();
+    const datum = n.kreiranDatum ? new Date(n.kreiranDatum) : today;
+    const datumStr = datum.toLocaleDateString("hr-HR");
+
+    // Build sheet rows: [label, value, label2, value2]  (15 cols wide)
+    const wsData = [
+      ["Nalog za IP. Perajica logističke usluge ST", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["*mora ići kao dokaz uz SD MP račun na mjesečnom obračunu / prije izdavanja računa", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Dostava na adresu:", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Ime i prezime:", n.imeIPrezime||"", "", "", "", "PJ nalogodavac:", n.pjNalogodavac||"", "", "", "", "", "", "", "", ""],
+      ["Adresa:", n.adresa||"", "", "", "", "Djelatnik:", n.djelatnik||"", "", "", "", "", "", "", "", ""],
+      ["Mjesto:", n.mjesto||"", "", "", "", "Datum:", datumStr, "", "", "", "", "", "", "", ""],
+      ["Mobitel:", n.mobitel||"", "", "", "", "Isporuka sa:", n.isporukaSa||"", "", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["B2C dostava", "", n.b2cDostava||"NE", "*izabrati DA/NE ako se vrši/ne vrši usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Dostava van Splita", "", n.dostavaVanSplita||"NE", "*izabrati DA/NE ako se vrši/ne vrši usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Gabaritna roba", "", n.gabaritnaRoba||"NE", "*izabrati DA za kućanske uređaje i TV iznad 55'' (55'' nije uključen)", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Nošenje na kat", "", n.nosenjaNaKat||"NE", "", "", "*upisati na koji kat se nosi", n.kojKat||"", "", "", "", "", "", "", "", ""],
+      ["B2B dostava", "", n.b2bDostava||"NE", "*izabrati DA/NE ako se vrši/ne vrši usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Broj paleta", "", n.brojPaleta||"", "*upisati broj paleta ako se vrši B2B usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Tip uređaja", "", n.tipUredaja||"", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Težina uređaja", "", n.tezinaUredaja ? parseFloat(n.tezinaUredaja) : "", "*upisat težinu uređaja", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Usluga instalacije/montaže", "", n.instalacija||"NE", "*izabrati DA/NE ako se vrši/ne vrši usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Odvoz starog uređaja", "", n.odvozStarog||"NE", "*izabrati DA/NE ako se vrši/ne vrši usluga", "", "", "", "", "", "", "", "", "", "", ""],
+      ["Dodatne napomene:", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      [n.napomene||"", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws["!cols"] = [{wch:28},{wch:22},{wch:10},{wch:46},{wch:2},{wch:18},{wch:20},{wch:2},{wch:2},{wch:2},{wch:2},{wch:2},{wch:2},{wch:2},{wch:2}];
+    ws["!rows"] = [{hpt:20},{hpt:15},{hpt:8},{hpt:15}];
+
+    // Style title row (row 0)
+    const titleCell = ws["A1"];
+    if (titleCell) { titleCell.s = { font:{bold:true,sz:13}, fill:blueFill }; }
+
+    // Style header rows for labels
+    const labelRows = [3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19];
+    labelRows.forEach(r => {
+      const cellRef = XLSX.utils.encode_cell({r, c:0});
+      if (ws[cellRef]) ws[cellRef].s = { font:bold, fill:grayFill, border };
+    });
+
+    // Style DA/NE values with color
+    [9,10,11,12,13,17,18].forEach(r => {
+      const ref = XLSX.utils.encode_cell({r, c:2});
+      if (ws[ref]) {
+        const val = ws[ref].v;
+        ws[ref].s = {
+          font: { bold:true, color:{ rgb: val==="DA" ? "16A34A" : "DC2626" } },
+          border, alignment:{ horizontal:"center", vertical:"center" }
+        };
+      }
+    });
+
+    // Add borders to all data cells
+    for (let r = 4; r <= 19; r++) {
+      for (let c = 0; c < 7; c++) {
+        const ref = XLSX.utils.encode_cell({r,c});
+        if (!ws[ref]) ws[ref] = {v:"",t:"s"};
+        if (!ws[ref].s) ws[ref].s = {};
+        if (!ws[ref].s.border) ws[ref].s.border = border;
+        if (!ws[ref].s.alignment) ws[ref].s.alignment = { vertical:"center", wrapText:true };
+      }
+    }
+
+    const sheetName = (n.imeIPrezime||"Nalog").replace(/[:\/?*[\]]/g,"").slice(0,28) + (data.length>1 ? ` (${idx+1})` : "");
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+
+  const filename = data.length === 1
+    ? `IP_Perajica_${(data[0].imeIPrezime||"nalog").replace(/\s+/g,"_")}.xlsx`
+    : `IP_Perajica_nalozi.xlsx`;
+  XLSX.writeFile(wb, filename);
+}
+
 function exportXLSX(filterIds) {
   const q = document.getElementById("search-input").value.toLowerCase();
   let data = filterIds
     ? nalozi.filter(n => filterIds.includes(n.id))
-    : nalozi.filter(n => !q || [n.nazivKupca,n.mjesto,n.externiDokument,n.nazivArtikla,n.adresa].some(v=>(v||"").toLowerCase().includes(q)));
+    : nalozi.filter(n => !q || [n.nazivKupca,n.mjesto,n.externiDokument,n.nazivArtikla,n.adresa,n.imeIPrezime,n.tipUredaja].some(v=>(v||"").toLowerCase().includes(q)));
+
+  if (aktivnaSpedicija === "perajica") { exportXLSXPerajica(data); showToast("Excel (.xlsx) export uspješan!"); return; }
 
   const wsData = buildXLSXRows(data);
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(wsData);
   ws['!cols'] = [{wch:5},{wch:14},{wch:24},{wch:28},{wch:14},{wch:16},{wch:18},{wch:8},{wch:16},{wch:20},{wch:32},{wch:18},{wch:12},{wch:20}];
 
-  // All borders for every cell
   const borderStyle = { style: "thin", color: { rgb: "000000" } };
   const border = { top: borderStyle, bottom: borderStyle, left: borderStyle, right: borderStyle };
   const totalRows = wsData.length;
@@ -1077,7 +1379,6 @@ function exportXLSX(filterIds) {
       if (!ws[cellRef].s) ws[cellRef].s = {};
       ws[cellRef].s.border = border;
       ws[cellRef].s.alignment = { wrapText: true, vertical: "center" };
-      // Bold + background for header row
       if (r === 0) {
         ws[cellRef].s.font = { bold: true };
         ws[cellRef].s.fill = { fgColor: { rgb: "F97316" }, patternType: "solid" };
@@ -1085,10 +1386,7 @@ function exportXLSX(filterIds) {
       }
     }
   }
-
-  // Header row height = 33 (points), approx 55px
   ws['!rows'] = [{ hpt: 33 }];
-
   XLSX.utils.book_append_sheet(wb, ws, "Nalozi");
   const fname = filterIds && data.length === 1
     ? `Milšped nalog ${data[0]?.externiDokument || ""} ${data[0]?.nazivKupca || ""}.xlsx`.trim()
