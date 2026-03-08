@@ -566,8 +566,11 @@ async function loadFromGitHub() {
     } else if (res.ok) {
       const json = await res.json();
       ghFileSha = json.sha;
-      nalozi = JSON.parse(decodeURIComponent(escape(atob(json.content.replace(/\n/g, "")))));
+      const _raw = atob(json.content.replace(/\n/g, ""));
+      try { nalozi = JSON.parse(decodeURIComponent(escape(_raw))); }
+      catch { nalozi = JSON.parse(_raw); }
       setSyncStatus("✅ Učitano (" + nalozi.length + ")", "ok");
+      localStorage.setItem(SPEDICIJE[aktivnaSpedicija].ls, JSON.stringify(nalozi)); // osvježi cache
     } else {
       throw new Error("HTTP " + res.status);
     }
