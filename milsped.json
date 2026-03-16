@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Big Bang CCO SPLIT",
+    "adresa": "Vukovarska 207",
+    "postanskiBroj": "21000",
+    "mjesto": "Split",
+    "kontaktBroj": "091-781-7365",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "61",
+    "fakturnaVrijednost": "389",
+    "externiDokument": "6187-03M-1",
+    "nazivArtikla": "Hladnjak kombinirani Gorenje NRK418EEW4",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mmsyt3oloovxer58q9o",
+    "kreiranDatum": "2026-03-16T09:12:19.173Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Tomislav Vlahović",
     "adresa": "Trenkova 84",
     "postanskiBroj": "21000",
