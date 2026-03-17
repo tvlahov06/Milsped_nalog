@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Ratko Sokolić",
+    "adresa": "Školska ulica 12",
+    "postanskiBroj": "10314",
+    "mjesto": "Križ",
+    "kontaktBroj": "098407608",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "31",
+    "fakturnaVrijednost": "279",
+    "externiDokument": "2553947",
+    "nazivArtikla": "Hladnjak ugradbeni Gorenje RI409EP1",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mmuikdkhizjtdva9o",
+    "kreiranDatum": "2026-03-17T11:13:10.577Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Big Bang CCO SPLIT",
     "adresa": "Vukovarska 207",
     "postanskiBroj": "21000",
