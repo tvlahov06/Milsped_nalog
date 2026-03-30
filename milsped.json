@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "BigBang CCO Split",
+    "adresa": "Vukovarska 207",
+    "postanskiBroj": "21000",
+    "mjesto": "Split",
+    "kontaktBroj": "021355181",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "16.3",
+    "fakturnaVrijednost": "499",
+    "externiDokument": "163449",
+    "nazivArtikla": "TV TCL 55C6K, 139.7cm (55\"), QD-Mini LED, 4K UHD SMART TV, GOOGLE TV",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnd940nfvndaikijqke",
+    "kreiranDatum": "2026-03-30T13:56:08.139Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Ratko Sokolić",
     "adresa": "Školska ulica 12",
     "postanskiBroj": "10314",
