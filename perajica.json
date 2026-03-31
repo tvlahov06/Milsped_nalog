@@ -132,7 +132,9 @@
     "napomene": "Nazvati 3 sata prije dostave.",
     "id": "mn8tk4fv1zjnk7s7sti",
     "kreiranDatum": "2026-03-27T11:29:40.987Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-03-31T13:42:50.813Z"
   },
   {
     "imeIPrezime": "Žana Kralj",
@@ -159,7 +161,9 @@
     "napomene": "",
     "id": "mn7rr7mr2h0r000vkyc",
     "kreiranDatum": "2026-03-26T17:51:26.307Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-03-31T13:42:49.518Z"
   },
   {
     "imeIPrezime": "Ivona Petrović",
@@ -186,7 +190,9 @@
     "napomene": "Kupac je zamolio dostavu popodne.",
     "id": "mn7otg2suzf6vspp319",
     "kreiranDatum": "2026-03-26T16:29:11.716Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-03-31T13:42:49.175Z"
   },
   {
     "imeIPrezime": "Neven Mazic",
