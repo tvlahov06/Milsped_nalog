@@ -294,7 +294,9 @@
     "napomene": "PRIKUP TELEVIZORA SA GORE NAVEDENE ADRESE I ODVOZ U KIKIK SERVIS.",
     "id": "mn4jurs8rklkiilhbjr",
     "kreiranDatum": "2026-03-24T11:46:56.936Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-03-31T13:42:47.409Z"
   },
   {
     "imeIPrezime": "Marin Cecić",
@@ -321,7 +323,9 @@
     "napomene": "Nazvati prije dostave radi dogovora",
     "id": "mn4hn7qttcubbbib42m",
     "kreiranDatum": "2026-03-24T10:45:05.141Z",
-    "izmjenjenDatum": "2026-03-24T10:45:17.518Z"
+    "izmjenjenDatum": "2026-03-24T10:45:17.518Z",
+    "preuzeto": true,
+    "preuzetoDatum": "2026-03-31T13:42:46.579Z"
   },
   {
     "imeIPrezime": "Nevenka Armanda",
