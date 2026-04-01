@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Supra Mea d.o.o.",
+    "adresa": "Maksimirska cesta 129",
+    "postanskiBroj": "10000",
+    "mjesto": "Zagreb",
+    "kontaktBroj": "012316086",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "28",
+    "fakturnaVrijednost": "499",
+    "externiDokument": "163982",
+    "nazivArtikla": "TV LG 55QNED86A3A 139.7cm (55\"), QNED, 4K UHD Smart TV, webOS",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mng6u6cuturgueetsof",
+    "kreiranDatum": "2026-04-01T15:15:48.270Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "BIG BANG Servis/Povrati",
     "adresa": "Gospodarska ulica 44",
     "postanskiBroj": "10431",
