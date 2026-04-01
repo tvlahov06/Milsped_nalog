@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "BIG BANG Servis/Povrati",
+    "adresa": "Gospodarska ulica 44",
+    "postanskiBroj": "10431",
+    "mjesto": "Sveta Nedelja",
+    "kontaktBroj": "013369555",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "15",
+    "fakturnaVrijednost": "399",
+    "externiDokument": "MSI 65-332",
+    "nazivArtikla": "TV LG 55NANO80A3B",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnfuuztg5geaatse7ir",
+    "kreiranDatum": "2026-04-01T09:40:31.060Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "BigBang CCO Split",
     "adresa": "Vukovarska 207",
     "postanskiBroj": "21000",
