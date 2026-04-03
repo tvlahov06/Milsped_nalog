@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Jurica Kovačević",
+    "adresa": "Ulica Ljudevita Posavskog 45",
+    "postanskiBroj": "31000",
+    "mjesto": "Osijek",
+    "kontaktBroj": "0996752713",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "23.8",
+    "fakturnaVrijednost": "699.50",
+    "externiDokument": "5196051",
+    "nazivArtikla": "Soundbar Samsung HW-Q990F",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnj8l498gz4jpwup8ys",
+    "kreiranDatum": "2026-04-03T18:28:03.404Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Supra Mea d.o.o.",
     "adresa": "Maksimirska cesta 129",
     "postanskiBroj": "10000",
