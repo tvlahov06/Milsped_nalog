@@ -24,7 +24,9 @@
     "napomene": "DOSTAVA D9OGOVORENA ZA 11.4,2026 IZA 12 SATI.\nNAZVATI PRIFJE DOSTAVE",
     "id": "mnsntrsf6bpzc8m14mq",
     "kreiranDatum": "2026-04-10T08:44:36.975Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-04-10T12:05:15.907Z"
   },
   {
     "imeIPrezime": "Katija Kalebić Jakupčević",
@@ -110,8 +112,8 @@
     "id": "mnhcq8ayarl9uzun3k",
     "kreiranDatum": "2026-04-02T10:48:28.042Z",
     "izmjenjenDatum": null,
-    "preuzeto": false,
-    "preuzetoDatum": null
+    "preuzeto": true,
+    "preuzetoDatum": "2026-04-10T12:05:16.736Z"
   },
   {
     "imeIPrezime": "Slaven Bratković",
