@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "MOBIDOM SERVIS",
+    "adresa": "SUPILOVA ULICA 7",
+    "postanskiBroj": "10000",
+    "mjesto": "ZAGREB",
+    "kontaktBroj": "0977089452",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "25",
+    "fakturnaVrijednost": "899",
+    "externiDokument": "164415",
+    "nazivArtikla": "TV PANASONIC 55MZ800",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnt6fteheu5od8iqin",
+    "kreiranDatum": "2026-04-10T17:25:38.585Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Jurica Kovačević",
     "adresa": "Ulica Ljudevita Posavskog 45",
     "postanskiBroj": "31000",
