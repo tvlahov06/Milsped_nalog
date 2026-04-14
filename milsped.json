@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "MR Servis",
+    "adresa": "Dugoselska 5",
+    "postanskiBroj": "10372",
+    "mjesto": "Rugvica",
+    "kontaktBroj": "01/640-1111",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "25",
+    "fakturnaVrijednost": "443",
+    "externiDokument": "164531",
+    "nazivArtikla": "TV 58\" Hisense QLED 58A7GQ 4K Smart TV",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnyqfnk0ovxbs2b1ccg",
+    "kreiranDatum": "2026-04-14T14:44:14.208Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Nediljko Čarić",
     "adresa": "Uvala Stivašnica, (Ražanj) 41",
     "postanskiBroj": "22203",
