@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Nediljko Čarić",
+    "adresa": "Uvala Stivašnica, (Ražanj) 41",
+    "postanskiBroj": "22203",
+    "mjesto": "Rogoznica",
+    "kontaktBroj": "098206787",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "12",
+    "fakturnaVrijednost": "448.88",
+    "externiDokument": "2601404",
+    "nazivArtikla": "TV TCL 55P7K",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mnyfu3z1tvtmskcari",
+    "kreiranDatum": "2026-04-14T09:47:32.893Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "MOBIDOM SERVIS",
     "adresa": "SUPILOVA ULICA 7",
     "postanskiBroj": "10000",
