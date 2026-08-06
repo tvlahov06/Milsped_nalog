@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Sara Vrabac",
+    "adresa": "Ulica dr.Ante Starčevića 25",
+    "postanskiBroj": "31500",
+    "mjesto": "Našice",
+    "kontaktBroj": "0911643360",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "74",
+    "fakturnaVrijednost": "448.29",
+    "externiDokument": "73586-13w-1",
+    "nazivArtikla": "",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mshgsuxffjngge943op",
+    "kreiranDatum": "2026-08-06T12:01:00.819Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Nada Benko",
     "adresa": "Žimider ulica 11",
     "postanskiBroj": "51260",
