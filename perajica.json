@@ -996,7 +996,9 @@
     "napomene": "",
     "id": "mrqjj40h4l7s05n5yz",
     "kreiranDatum": "2026-07-18T15:47:38.129Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-11T14:17:44.937Z"
   },
   {
     "imeIPrezime": "DARKO DRAGOJEVIĆ",
@@ -1024,8 +1026,8 @@
     "id": "mrp5r56xpgz22sp7tv",
     "kreiranDatum": "2026-07-17T16:34:12.105Z",
     "izmjenjenDatum": null,
-    "preuzeto": false,
-    "preuzetoDatum": null
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-11T14:17:44.096Z"
   },
   {
     "imeIPrezime": "Big Bang CCO Split",
@@ -1052,7 +1054,9 @@
     "napomene": "Povrat oštećene perilice rublja Gorenje",
     "id": "mrp4jtneqnl90bhstm",
     "kreiranDatum": "2026-07-17T16:00:30.938Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-11T14:17:43.718Z"
   },
   {
     "imeIPrezime": "Jurica Galić",
