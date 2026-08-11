@@ -1,5 +1,32 @@
 [
   {
+    "imeIPrezime": "Hilda Jukić",
+    "adresa": "Rendićeva 24",
+    "postanskiBroj": "21000",
+    "mjesto": "Split",
+    "kontaktBroj": "0915928016",
+    "pjNalogodavac": "BigBang Split CCO",
+    "djelatnik": "Tomislav",
+    "datumNaloga": "2026-08-11",
+    "isporukaSa": "BigBang Split CCO",
+    "b2cDostava": "DA",
+    "gabaritnaRoba": "DA",
+    "nosenjaNaKat": "DA",
+    "kojKat": "",
+    "dostavaVanSplita": "NE",
+    "b2bDostava": "NE",
+    "brojPaleta": "",
+    "instalacija": "NE",
+    "odvozStarog": "NE",
+    "tipUredaja": "Perilica rublja LG F4WR510SBW",
+    "koleta": "1",
+    "tezinaUredaja": "70",
+    "napomene": "Prikup od kupca i dostava nama u dućan",
+    "id": "msoqymd68rhxpamj1rq",
+    "kreiranDatum": "2026-08-11T14:19:49.050Z",
+    "izmjenjenDatum": null
+  },
+  {
     "imeIPrezime": "MAESTRAL V.B. PUTOVANJA",
     "adresa": "PUT FIRULA 49",
     "postanskiBroj": "21000",
@@ -186,7 +213,9 @@
     "napomene": "",
     "id": "mshso3gzgu9xqb4r7z",
     "kreiranDatum": "2026-08-06T17:33:14.003Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-11T14:18:10.488Z"
   },
   {
     "imeIPrezime": "Gudelj Karmela",
@@ -213,7 +242,9 @@
     "napomene": "Dostava kupcu i povrat oštećene",
     "id": "mshjr0770xpw2jjy9xq",
     "kreiranDatum": "2026-08-06T13:23:33.187Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-11T14:18:09.823Z"
   },
   {
     "imeIPrezime": "Dane Knežević",
