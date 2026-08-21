@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "GABRIELA HORVAT JERGOVIĆ",
+    "adresa": "TRG SENJSKOG USKOKA 7",
+    "postanskiBroj": "10000",
+    "mjesto": "ZAGREB",
+    "kontaktBroj": "0994364172",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "55",
+    "fakturnaVrijednost": "537.38",
+    "externiDokument": "2811461",
+    "nazivArtikla": "Otvorena ambalaža - Sušilica rublja Bosch WTH85220BY",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mt2y1aomo5fxvtx8dl",
+    "kreiranDatum": "2026-08-21T12:46:37.654Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "Sara Vrabac",
     "adresa": "Ulica dr.Ante Starčevića 25",
     "postanskiBroj": "31500",
