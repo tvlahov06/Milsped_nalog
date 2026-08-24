@@ -1,5 +1,23 @@
 [
   {
+    "nazivKupca": "Daniel Pahljina",
+    "adresa": "Mundanije 8",
+    "postanskiBroj": "51280",
+    "mjesto": "Rab",
+    "kontaktBroj": "0919425506",
+    "poslovnica": "BigBang Split CCO",
+    "koleta": "1",
+    "brutoTezina": "69",
+    "fakturnaVrijednost": "399",
+    "externiDokument": "2807660",
+    "nazivArtikla": "Perilica rublja Gorenje WNS84A2TWIFI",
+    "iznosOtkupnine": "",
+    "otkupnina": false,
+    "id": "mt6x5um172qd8v61umc",
+    "kreiranDatum": "2026-08-24T07:33:15.193Z",
+    "izmjenjenDatum": null
+  },
+  {
     "nazivKupca": "GABRIELA HORVAT JERGOVIĆ",
     "adresa": "TRG SENJSKOG USKOKA 7",
     "postanskiBroj": "10000",
