@@ -105,7 +105,9 @@
     "napomene": "Dostava SBS hladnjaka, te povrat neispravnog SBS hladnjaka od kupca u poslovnicu CCO split",
     "id": "mt44y54ci2evj7k92b",
     "kreiranDatum": "2026-08-22T08:47:53.964Z",
-    "izmjenjenDatum": null
+    "izmjenjenDatum": null,
+    "preuzeto": true,
+    "preuzetoDatum": "2026-08-26T21:37:44.100Z"
   },
   {
     "imeIPrezime": "Antonija Bulić",
