@@ -1364,7 +1364,6 @@ function exportXLSXPerajica(data) {
       {wch:14.11},{wch:8.11},{wch:8.11},{wch:8.11},{wch:6.67}
     ];
     ws["!rows"] = [];
-    for (let i = 0; i < 26; i++) ws["!rows"].push({ hpt: i === 0 ? 22.2 : 14.4 });
 
     // ── ROW 1 – A:J merged, outside borders, green, bold 11 ──
     merge(ws, 0,0, 0,9);
@@ -1510,47 +1509,59 @@ function exportXLSXPerajica(data) {
 
     // ── ROW 19 – prazan ──
 
-    // ── ROW 20 – Težina uređaja ──
+    // ── ROW 20 – Količina ──
     merge(ws, 19,0, 19,1);
-    cs(ws,"A20", "Težina uređaja", { font:font(11,true), fill:greenFill, alignment:midL });
+    cs(ws,"A20", "Količina", { font:font(11,true), fill:greenFill, alignment:midL });
     applyOutsideBorders(ws, 19,0, 19,1);
-    cs(ws,"C20", n.tezinaUredaja ? parseFloat(n.tezinaUredaja) : "",
+    cs(ws,"C20", n.koleta ? parseFloat(n.koleta) : "",
       { font:font(10), fill:yellowFill, alignment:midC });
     allB(ws, "C20");
     merge(ws, 19,3, 19,9);
-    cs(ws,"D20", "*upisat težinu uređaja u kg", { font:font(9,false,true), alignment:midL });
+    cs(ws,"D20", "*upisati količinu (broj koleta)", { font:font(9,false,true), alignment:midL });
 
-    // ── ROW 21 – prazan ──
+    // ── ROW 21 – Težina uređaja ──
+    merge(ws, 20,0, 20,1);
+    cs(ws,"A21", "Težina uređaja", { font:font(11,true), fill:greenFill, alignment:midL });
+    applyOutsideBorders(ws, 20,0, 20,1);
+    cs(ws,"C21", n.tezinaUredaja ? parseFloat(n.tezinaUredaja) : "",
+      { font:font(10), fill:yellowFill, alignment:midC });
+    allB(ws, "C21");
+    merge(ws, 20,3, 20,9);
+    cs(ws,"D21", "*upisat težinu uređaja u kg", { font:font(9,false,true), alignment:midL });
 
-    // ── ROW 22 – Usluga instalacije/montaže ──
-    merge(ws, 21,0, 21,1);
-    cs(ws,"A22", "Usluga instalacije/montaže", { font:font(11,true), fill:greenFill, alignment:midL });
-    applyOutsideBorders(ws, 21,0, 21,1);
-    cs(ws,"C22", n.instalacija||"NE", { font:font(10), alignment:midC });
-    allB(ws, "C22");
-    merge(ws, 21,3, 21,9);
-    cs(ws,"D22", "*izabrati DA/NE ako se vrši/ne vrši usluga", { font:font(9,false,true), alignment:midL });
+    // ── ROW 22 – prazan ──
 
-    // ── ROW 23 – Odvoz starog uređaja ──
+    // ── ROW 23 – Usluga instalacije/montaže ──
     merge(ws, 22,0, 22,1);
-    cs(ws,"A23", "Odvoz starog uređaja", { font:font(11,true), fill:greenFill, alignment:midL });
+    cs(ws,"A23", "Usluga instalacije/montaže", { font:font(11,true), fill:greenFill, alignment:midL });
     applyOutsideBorders(ws, 22,0, 22,1);
-    cs(ws,"C23", n.odvozStarog||"NE", { font:font(10), alignment:midC });
+    cs(ws,"C23", n.instalacija||"NE", { font:font(10), alignment:midC });
     allB(ws, "C23");
     merge(ws, 22,3, 22,9);
     cs(ws,"D23", "*izabrati DA/NE ako se vrši/ne vrši usluga", { font:font(9,false,true), alignment:midL });
 
-    // ── ROW 24-25 – prazni ──
+    // ── ROW 24 – Odvoz starog uređaja ──
+    merge(ws, 23,0, 23,1);
+    cs(ws,"A24", "Odvoz starog uređaja", { font:font(11,true), fill:greenFill, alignment:midL });
+    applyOutsideBorders(ws, 23,0, 23,1);
+    cs(ws,"C24", n.odvozStarog||"NE", { font:font(10), alignment:midC });
+    allB(ws, "C24");
+    merge(ws, 23,3, 23,9);
+    cs(ws,"D24", "*izabrati DA/NE ako se vrši/ne vrši usluga", { font:font(9,false,true), alignment:midL });
 
-    // ── ROW 26 – Dodatne napomene ──
-    merge(ws, 25,0, 25,1);
-    cs(ws,"A26", "Dodatne napomene", { font:font(11,true), fill:greenFill, alignment:midL });
-    applyOutsideBorders(ws, 25,0, 25,1);
-    merge(ws, 25,2, 25,9);
-    cs(ws,"C26", n.napomene||"", { font:font(10), alignment:midLW });
-    applyOutsideBorders(ws, 25,2, 25,9);
+    // ── ROW 25-26 – prazni ──
 
-    ws["!ref"] = "A1:J26";
+    // ── ROW 27 – Dodatne napomene ──
+    merge(ws, 26,0, 26,1);
+    cs(ws,"A27", "Dodatne napomene", { font:font(11,true), fill:greenFill, alignment:midL });
+    applyOutsideBorders(ws, 26,0, 26,1);
+    merge(ws, 26,2, 26,9);
+    cs(ws,"C27", n.napomene||"", { font:font(10), alignment:midLW });
+    applyOutsideBorders(ws, 26,2, 26,9);
+
+    ws["!ref"] = "A1:J27";
+    ws["!rows"] = [];
+    for (let i = 0; i < 27; i++) ws["!rows"].push({ hpt: i === 0 ? 22.2 : 14.4 });
 
     const sheetName = (n.imeIPrezime||"Nalog").replace(/[:/\\?*[\]]/g,"").slice(0,28) + (data.length>1 ? ` (${idx+1})` : "");
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
